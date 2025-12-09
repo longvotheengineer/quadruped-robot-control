@@ -19,19 +19,19 @@ robot_motion.gait = "ZERO";
 
 robot_config.leg_type = "left-front";
 theta_i = Gait(robot_motion, robot_config);
-theta_i_LF = theta_i;
+theta_i_LF = theta_i{1};
 
 robot_config.leg_type = "left-behind";
 theta_i = Gait(robot_motion, robot_config);
-theta_i_LB = theta_i;
+theta_i_LB = theta_i{2};
 
 robot_config.leg_type = "right-front";
 theta_i = Gait(robot_motion, robot_config);
-theta_i_RF = theta_i;
+theta_i_RF = theta_i{3};
 
 robot_config.leg_type = "right-behind";
 theta_i = Gait(robot_motion, robot_config);
-theta_i_RB = theta_i;
+theta_i_RB = theta_i{4};
 
 if (clientID>-1)
     disp('Connected to remote API server');
@@ -54,7 +54,7 @@ if (clientID>-1)
     [r_RB, h_RB(2)] = sim.simxGetObjectHandle(clientID, 'Revolute_joint_01', sim.simx_opmode_blocking);
     [r_RB, h_RB(3)] = sim.simxGetObjectHandle(clientID, 'Revolute_joint_02', sim.simx_opmode_blocking);
 
-    for j = 1 : size(theta_i,1)
+    for j = 1 : size(theta_i{1},1)
         joint_pos_left_front = [theta_i_LF(j,1), theta_i_LF(j,2), theta_i_LF(j,3)]; 
         joint_pos_right_behind = [theta_i_RB(j,1), theta_i_RB(j,2), theta_i_RB(j,3)];
         joint_pos_left_behind = [theta_i_LB(j,1), theta_i_LB(j,2), theta_i_LB(j,3)];
@@ -64,7 +64,7 @@ if (clientID>-1)
             sim.simxSetJointTargetPosition(clientID, h_RB(i), joint_pos_right_behind(i), sim.simx_opmode_streaming);                  
             sim.simxSetJointTargetPosition(clientID, h_LB(i), joint_pos_left_behind(i), sim.simx_opmode_streaming);
             sim.simxSetJointTargetPosition(clientID, h_RF(i), joint_pos_right_front(i), sim.simx_opmode_streaming);          
-            pause(0.315);
+            pause(0.001);
         end
     end
 

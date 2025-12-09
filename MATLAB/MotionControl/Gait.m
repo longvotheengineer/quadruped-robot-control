@@ -48,18 +48,38 @@ function theta_i = Gait(robot_motion, robot_config)
     end
     
     waypoint_n = 10;
+    waypoint_n_zero = 500;
     if robot_motion.gait == "ZERO"
-        [theta1, theta2, theta3] = InverseKinematics(pos_A(1), pos_A(2), pos_A(3), robot_config);
-        theta_iA = [theta1, theta2, theta3];
-        [theta1, theta2, theta3] = InverseKinematics(pos_B(1), pos_B(2), pos_B(3), robot_config);
-        theta_iB = [theta1, theta2, theta3];
-        waypoint_jointspace_AB1 = linspace(theta_iA(1), theta_iB(1), waypoint_n);
-        waypoint_jointspace_AB2 = linspace(theta_iA(2), theta_iB(2), waypoint_n);
-        waypoint_jointspace_AB3 = linspace(theta_iA(3), theta_iB(3), waypoint_n);
+        theta_iA{1} = [0, 0, 0];
+        theta_iA{2} = [0, 0, 0];
+        theta_iA{3} = [0, 0, 0];
+        theta_iA{4} = [0, 0, 0];
+        theta_iB{1} = [0, -pi/2,  pi/4];
+        theta_iB{2} = [0, -pi/2,  pi/4];
+        theta_iB{3} = [0,  pi/2, -pi/4];
+        theta_iB{4} = [0,  pi/2, -pi/4];
+        waypoint_jointspace_AB1{1} = linspace(theta_iA{1}(1), theta_iB{1}(1), waypoint_n_zero);
+        waypoint_jointspace_AB1{2} = linspace(theta_iA{2}(1), theta_iB{2}(1), waypoint_n_zero);
+        waypoint_jointspace_AB1{3} = linspace(theta_iA{3}(1), theta_iB{3}(1), waypoint_n_zero);
+        waypoint_jointspace_AB1{4} = linspace(theta_iA{4}(1), theta_iB{4}(1), waypoint_n_zero);
+        waypoint_jointspace_AB2{1} = linspace(theta_iA{1}(2), theta_iB{1}(2), waypoint_n_zero);
+        waypoint_jointspace_AB2{2} = linspace(theta_iA{2}(2), theta_iB{2}(2), waypoint_n_zero);
+        waypoint_jointspace_AB2{3} = linspace(theta_iA{3}(2), theta_iB{3}(2), waypoint_n_zero);
+        waypoint_jointspace_AB2{4} = linspace(theta_iA{4}(2), theta_iB{4}(2), waypoint_n_zero);
+        waypoint_jointspace_AB3{1} = linspace(theta_iA{1}(3), theta_iB{1}(3), waypoint_n_zero);
+        waypoint_jointspace_AB3{2} = linspace(theta_iA{2}(3), theta_iB{2}(3), waypoint_n_zero);
+        waypoint_jointspace_AB3{3} = linspace(theta_iA{3}(3), theta_iB{3}(3), waypoint_n_zero);
+        waypoint_jointspace_AB3{4} = linspace(theta_iA{4}(3), theta_iB{4}(3), waypoint_n_zero);
         
-        theta_i = zeros(waypoint_n, 3);
-        for i = 1 : waypoint_n
-            theta_i(i, :) = [waypoint_jointspace_AB1(i), waypoint_jointspace_AB2(i), waypoint_jointspace_AB3(i)];
+        theta_i = cell(1, 4);
+        for i = 1 : waypoint_n_zero
+            theta_i{i} = zeros(waypoint_n_zero, 3);
+        end
+        for i = 1 : waypoint_n_zero
+            theta_i{1}(i, :) = [waypoint_jointspace_AB1{1}(i), waypoint_jointspace_AB2{1}(i), waypoint_jointspace_AB3{1}(i)];
+            theta_i{2}(i, :) = [waypoint_jointspace_AB1{2}(i), waypoint_jointspace_AB2{2}(i), waypoint_jointspace_AB3{2}(i)];
+            theta_i{3}(i, :) = [waypoint_jointspace_AB1{3}(i), waypoint_jointspace_AB2{3}(i), waypoint_jointspace_AB3{3}(i)];
+            theta_i{4}(i, :) = [waypoint_jointspace_AB1{4}(i), waypoint_jointspace_AB2{4}(i), waypoint_jointspace_AB3{4}(i)];
         end
     else         
         waypoint_AB1 = linspace(pos_A(1), pos_B(1), waypoint_n);
