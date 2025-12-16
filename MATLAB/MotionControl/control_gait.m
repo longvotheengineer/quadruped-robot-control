@@ -1,4 +1,4 @@
-function control_gait(robot_config, robot_motion, sim, clientID)
+function control_gait(robot_config, robot_motion, sim, clientID, sensor_data)
     step_time_zero = 0.001;
     step_time      = 0.01;
     
@@ -61,10 +61,10 @@ function control_gait(robot_config, robot_motion, sim, clientID)
                     % for i = 1 : 3
                         sim.simxSetJointTargetPosition(clientID, h_LB(i), joint_pos_left_behind(i), sim.simx_opmode_streaming);
                         sim.simxSetJointTargetPosition(clientID, h_RF(i), joint_pos_right_front(i), sim.simx_opmode_streaming);
-                        [ret_xgps, x_gps] = sim.simxGetFloatSignal(clientID,'GPS1',sim.simx_opmode_buffer);
-                        [ret_ygps, y_gps] = sim.simxGetFloatSignal(clientID,'GPS2',sim.simx_opmode_buffer);
-                        [ret_zgps, z_gps] = sim.simxGetFloatSignal(clientID,'GPS3',sim.simx_opmode_buffer);
-                        disp(x_gps);                        
+                        sensor_data = read_sensor_data(clientID, sim, sensor_data);
+                        
+                        disp( sensor_data.ax);
+
                     end
                     pause(step_time);   
                 end  

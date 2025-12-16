@@ -18,6 +18,13 @@ robot_config.robot_length = robot_length;
 robot_motion.gait = "ZERO";
 control_gait(robot_config, robot_motion, sim, clientID);
 
+sensor_data = struct(...
+    'gps_x', nan, 'gps_y', nan, 'gps_z', nan, ...
+    'ax', nan, 'ay', nan, 'az', nan, ...
+    'vx', nan, 'vy', nan, 'vz', nan, ...
+    'theta_scan', [], 'rho', [] ...
+);
+
 [res, measuredData] = sim.simxGetStringSignal(clientID, 'measuredDataAtThisTime', sim.simx_opmode_streaming);
 sim.simxAddStatusbarMessage(clientID,'Begin Simulation',sim.simx_opmode_oneshot);
 
@@ -32,19 +39,19 @@ if (clientID>-1)
         pause(3);
         robot_motion.gait = "WALK";
         robot_motion.step = 10;
-        control_gait(robot_config, robot_motion, sim, clientID);  
+        control_gait(robot_config, robot_motion, sim, clientID, sensor_data);  
         robot_motion.gait = "TURN_RIGHT";
         robot_motion.step = 90;
-        control_gait(robot_config, robot_motion, sim, clientID);  
+        control_gait(robot_config, robot_motion, sim, clientID, sensor_data);  
         robot_motion.gait = "FORWARD";
         robot_motion.step = 10;
-        control_gait(robot_config, robot_motion, sim, clientID);  
+        control_gait(robot_config, robot_motion, sim, clientID, sensor_data);  
         robot_motion.gait = "TURN_RIGHT";
         robot_motion.step = 90;
-        control_gait(robot_config, robot_motion, sim, clientID);
+        control_gait(robot_config, robot_motion, sim, clientID, sensor_data);
         robot_motion.gait = "FORWARD";
         robot_motion.step = 10;
-        control_gait(robot_config, robot_motion, sim, clientID);  
+        control_gait(robot_config, robot_motion, sim, clientID, sensor_data);  
         pause(3);
     end
 else
