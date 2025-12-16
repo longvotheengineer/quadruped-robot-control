@@ -31,6 +31,8 @@ if (clientID>-1)
     disp('Connected to remote API server');  
     while true
         pause(3);
+       
+        disp(rho);
         robot_motion.gait = "WALK";
         robot_motion.step = 10;
         control_gait(robot_config, robot_motion, sim, clientID);  
