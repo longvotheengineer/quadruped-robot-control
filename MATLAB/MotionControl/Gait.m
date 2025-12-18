@@ -183,7 +183,6 @@ function theta_i = Gait(robot_motion, robot_config)
             neutral_pos = [leg_sign_x * L_half, ...
                            leg_sign_y * W_half, ...
                            z_neutral];
-
         otherwise
     end
         
@@ -218,9 +217,7 @@ function theta_i = Gait(robot_motion, robot_config)
             theta_i{2}(i, :) = [waypoint_jointspace_AB1{2}(i), waypoint_jointspace_AB2{2}(i), waypoint_jointspace_AB3{2}(i)];
             theta_i{3}(i, :) = [waypoint_jointspace_AB1{3}(i), waypoint_jointspace_AB2{3}(i), waypoint_jointspace_AB3{3}(i)];
             theta_i{4}(i, :) = [waypoint_jointspace_AB1{4}(i), waypoint_jointspace_AB2{4}(i), waypoint_jointspace_AB3{4}(i)];
-        end    
-    
-    
+        end         
     elseif robot_motion.gait == "WALK"
         % === STABLE GAIT: 4-BEAT CRAWL ===
         
@@ -288,9 +285,6 @@ function theta_i = Gait(robot_motion, robot_config)
             [theta1, theta2, theta3] = InverseKinematics(px, py, pz, robot_config);
             theta_i(i, :) = [theta1 theta2 theta3];
         end
-
-
-
     else         
         waypoint_AB1 = linspace(pos_A(1), pos_B(1), waypoint_n);
         waypoint_AB2 = linspace(pos_A(2), pos_B(2), waypoint_n);

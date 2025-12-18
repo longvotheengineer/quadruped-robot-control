@@ -48,9 +48,6 @@ for i = 1:length(signals)
     sim.simxGetFloatSignal(clientID, signals{i}, sim.simx_opmode_streaming);
 end
 
-
-
-
 if (clientID>-1)
     disp('Connected to remote API server');  
     while true
