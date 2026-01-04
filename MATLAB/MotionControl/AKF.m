@@ -50,14 +50,14 @@ classdef AKF < handle
             %Jacobian F 
             F = eye(5);
             F(1, 3) = (-vx * s - vy * c) * dt;
-            F(2, 3) = (vx * c - vy * s) * dt;
-            F(1, 4) = c * dt;
-            F(2, 4) = s * dt;
+            F(2, 3) = ( vx * c - vy * s) * dt;
+            F(1, 4) =  c * dt;
+            F(2, 4) =  s * dt;
             F(1, 5) = -s * dt;
-            F(2, 5) = c * dt;
-            F(4, 5) = omega * dt; 
+            F(2, 5) =  c * dt;
+            F(4, 5) =  omega * dt; 
             F(5, 4) = -omega * dt;
-            obj.P = F * obj.P * F' + obj.Q;
+            obj.P   =  F * obj.P * F' + obj.Q;
         end
         
         % Adaptive Correction Step

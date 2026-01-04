@@ -1,6 +1,6 @@
 function theta_i = Gait(robot_motion, robot_config)
-    waypoint_n = 20;
-    waypoint_n_ground = 30;
+    waypoint_n = 2000;
+    waypoint_n_ground = 3000;
     waypoint_n_zero = 500;
     
     switch robot_motion.gait
