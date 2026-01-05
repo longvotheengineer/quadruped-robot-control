@@ -1,9 +1,9 @@
 function [x, y, z] = ForwardKinematics(theta1, theta2, theta3, robot_config)
-    L = robot_config.robot_length.base_length;
-    W = robot_config.robot_length.base_width;
-    L1 = robot_config.robot_length.L1;
-    L2 = robot_config.robot_length.L2;
-    L3 = robot_config.robot_length.L3;
+    L  = robot_config.length.base_length;
+    W  = robot_config.length.base_width;
+    L1 = robot_config.length.L1;
+    L2 = robot_config.length.L2;
+    L3 = robot_config.length.L3;
 
     % syms L1 L2 L3 theta1 theta2 theta3 a_i_minus_1 alpha_i_minus_1 di thetai r11 r12 r13 r21 r22 r23 r31 r32 r33 px py pz;
     % 

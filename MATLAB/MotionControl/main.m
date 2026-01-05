@@ -1,23 +1,59 @@
-% clear; clc; close all;
+clear; close all; clc;
 
-robot_length = struct('base_length', 0.50, ...
-                      'base_width',  0.50, ...
-                      'L1',          0.05, ...
-                      'L2',          0.15, ...
-                      'L3',          0.10);
+% Initialize project paths
+setup();
 
-robot_config = struct('leg_type',    "", ...
-                      'joint_angle', "");
-robot_config.robot_length = robot_length;
+sim = remApi('remoteApi');      % using the prototype file (remoteApiProto.m)
+sim.simxFinish(-1);             % just in case, close all opened connections
+clientID = sim.simxStart('127.0.0.1', 19999, true, true, 5000, 5);
+sim.simxSynchronous(clientID, true);
+simClient    = struct('sim', sim, ...
+                      'clientID', clientID);
 
-robot_config.leg_type = "left-front"; 
-% robot_config.leg_type = "left-behind";
-% robot_config.leg_type = "right-front";
-% robot_config.leg_type = "right-behind";
+robot_length = struct('base_length',    0.50,  ...
+                      'base_width',     0.20,  ...
+                      'L1',             0.05,  ...
+                      'L2',             0.15,  ...
+                      'L3',             0.10);
+robot_config = struct('leg_type',       "  ",  ...
+                      'joint_angle',    "  ",  ...
+                      'length', robot_length);
+robot_motion = struct('gait',           "  ",  ...
+                      'step',           0.00);
+robot        = struct('config', robot_config,  ...
+                      'motion', robot_motion);
 
-% WorkSpace(robot_config);  // left-front leg workspace
-
-leg = InitModel(robot_config);
-leg.plot([0, 0, 0]);
-
-TrajectoryPlanning(robot_config);
+robot.motion.gait = "ZERO";
+control_gait(robot, simClient);
+if (clientID>-1)
+    disp('Connected to remote API server');  
+    while true
+        % pause(3);
+        % robot.motion.gait = "WALK";
+        % robot.motion.step = 10;
+        % control_gait(robot, simClient);  
+        robot.motion.gait = "FORWARD";
+        robot.motion.step = 10;
+        control_gait(robot, simClient); 
+        robot.motion.gait = "TURN_RIGHT";
+        robot.motion.step = 2;
+        control_gait(robot, simClient);  
+        robot.motion.gait = "FORWARD";
+        robot.motion.step = 10;
+        control_gait(robot, simClient);  
+        robot.motion.gait = "TURN_RIGHT";
+        robot.motion.step = 5;
+        control_gait(robot, simClient);
+        robot.motion.gait = "FORWARD";
+        robot.motion.step = 20;
+        control_gait(robot, simClient);  
+        robot.motion.gait = "TURN_LEFT";
+        robot.motion.step = 3;
+        control_gait(robot, simClient);
+    end 
+else
+    disp('Failed connecting to remote API server');
+end
+    sim.delete(); % call the destructor!
+    
+    disp('Program ended');

@@ -1,6 +1,9 @@
-function control_gait(robot_config, robot_motion, sim, clientID, sensor_data, slamObj, axMap, state,akfObj)
+function control_gait(robot, simClient)
+    clientID = simClient.clientID;
+    sim      = simClient.sim;
+
     step_time_zero = 0.001;
-    step_time      = 0.010;
+    step_time      = 0.001;
     % joint handle
     h_LF = [0, 0, 0];
     h_LB = [0, 0, 0];
@@ -19,12 +22,12 @@ function control_gait(robot_config, robot_motion, sim, clientID, sensor_data, sl
     [~, h_RB(2)] = sim.simxGetObjectHandle(clientID, 'Revolute_joint_01', sim.simx_opmode_blocking);
     [~, h_RB(3)] = sim.simxGetObjectHandle(clientID, 'Revolute_joint_02', sim.simx_opmode_blocking);
     
-    [theta_i_LF, theta_i_LB, theta_i_RF, theta_i_RB, theta_i] = change_gait(robot_config, robot_motion);
+    [theta_i_LF, theta_i_LB, theta_i_RF, theta_i_RB, theta_i] = change_gait(robot.config, robot.motion);
 
-    % if ismember(robot_motion.gait, ["TURN_LEFT", "TURN_RIGHT"])
-    %     robot_motion.step = round(robot_motion.step / 25);
+    % if ismember(robot.motion.gait, ["TURN_LEFT", "TURN_RIGHT"])
+    %     robot.motion.step = round(robot.motion.step / 25);
     % end
-    switch robot_motion.gait
+    switch robot.motion.gait
         case "ZERO"  
             for j = 1 : size(theta_i{1},1)
                 joint_pos_left_front   = [theta_i_LF(j,1), theta_i_LF(j,2), theta_i_LF(j,3)]; 
@@ -41,7 +44,7 @@ function control_gait(robot_config, robot_motion, sim, clientID, sensor_data, sl
             end  
         otherwise
             gait_step = 0;
-            while (gait_step < robot_motion.step)
+            while (gait_step < robot.motion.step)
                 for j = 1 : size(theta_i,1)
                     joint_pos_left_front   = [theta_i_LF(j,1), theta_i_LF(j,2), theta_i_LF(j,3)]; 
                     joint_pos_right_behind = [theta_i_RB(j,1), theta_i_RB(j,2), theta_i_RB(j,3)];
@@ -53,10 +56,8 @@ function control_gait(robot_config, robot_motion, sim, clientID, sensor_data, sl
                         sim.simxSetJointTargetPosition(clientID, h_LB(i), joint_pos_left_behind (i), sim.simx_opmode_streaming);
                         sim.simxSetJointTargetPosition(clientID, h_RF(i), joint_pos_right_front (i), sim.simx_opmode_streaming);
                     end
-                    % pause(step_time);   
-                end
-                sim.simxSynchronousTrigger(clientID);
-                [state, sensor_data] = prediction_AKF(clientID, sim, sensor_data, slamObj, axMap, state, akfObj);
+                    pause(step_time);   
+                end               
                 gait_step = gait_step + 1;
             end
     end   
