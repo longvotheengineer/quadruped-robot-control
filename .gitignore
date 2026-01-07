@@ -86,7 +86,6 @@ env/
 # Shared objects (dynamic libraries)
 # NOTE: If your CoppeliaSim Remote API requires specific DLLs/SOs 
 # in the repo, un-comment the lines below or force add them.
-*.dll
 *.so
 *.so.*
 *.dylib
