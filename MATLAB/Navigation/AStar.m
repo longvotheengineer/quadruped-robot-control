@@ -5,7 +5,7 @@ map = occMap;   % occMap là đối tượng occupancyMap
 planner = plannerAStarGrid(map);
 
 % --- Thiết lập điểm bắt đầu và kết thúc (theo tọa độ thế giới) ---
-startLocation = [0 0];
+startLocation = [3 0];
 endLocation   = [2 3];
 
 % --- Tìm đường bằng A* ---

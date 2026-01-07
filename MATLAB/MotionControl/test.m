@@ -20,7 +20,8 @@ sensor_data  = struct('gps_x', nan, 'gps_y', nan, 'gps_z', nan, ...
 state        = struct('first_pose', [], ...  
                       'gps_x',      [], 'gps_y',  [], ...
                       'akf_x',      [0], 'akf_y',  [0], ...       
-                      'slam_x',     [], 'slam_y', []);
+                      'slam_x',     [], 'slam_y', [],...
+                      'last_scan',  []);
 
 maxRange = 8; 
 slamObj = lidarSLAM(20, maxRange);
@@ -41,22 +42,6 @@ robot_length = struct('base_length', 0.5,...
 robot_config = struct('leg_type', "",...
                       'joint_angle', "");
 robot_config.robot_length = robot_length;
-robot_motion.gait = "ZERO";
-control_gait(robot_config, robot_motion, sim, clientID,slamObj, axMap);
-
-sensor_data = struct(...
-    'gps_x', nan, 'gps_y', nan, 'gps_z', nan, ...
-    'ax', nan, 'ay', nan, 'az', nan, ...
-    'vx', nan, 'vy', nan, 'vz', nan, ...
-    'theta_scan', [], 'rho', [] ...
-);
-
-state = struct(...
-    'first_pose', [], ...  
-    'gps_x', [], 'gps_y', [], ...       
-    'slam_x', [], 'slam_y', [], ...
-    'ekf_x', [], 'ekf_y', [] ...
-);
 
 initial_pose.x = 0; 
 initial_pose.y = 0;
@@ -98,20 +83,14 @@ if (clientID>-1)
         % robot_motion.step = 10;
         % control_gait(robot_config, robot_motion, sim, clientID, sensor_data, slamObj, axMap, state,akfObj);  
         % pause(3);
-        pause(3);
+        pause(0.01);
         robot_motion.gait = "FORWARD";
-        target_steps = 10; 
+        target_steps = 30; 
         state = control(robot_config, robot_motion,sim, clientID, target_steps, sensor_data, slamObj, axMap, state, akfObj);
         robot_motion.gait = "TURN_RIGHT";
         target_steps = 2;
-        control(robot_config, robot_motion, sim, clientID, target_steps, sensor_data, slamObj, axMap, state, akfObj);
-        robot_motion.gait = "FORWARD";
-        target_steps = 10;
-        state = control(robot_config, robot_motion, sim, clientID, target_steps, sensor_data, slamObj, axMap, state, akfObj);
-        robot_motion.gait = "TURN_RIGHT";
-        target_steps = 2;
-        control(robot_config, robot_motion, sim, clientID, target_steps, sensor_data, slamObj, axMap, state, akfObj);
-        pause(3);
+        state =control(robot_config, robot_motion, sim, clientID, target_steps, sensor_data, slamObj, axMap, state, akfObj);
+        pause(0.01);
     end 
 else
     disp('Failed connecting to remote API server');

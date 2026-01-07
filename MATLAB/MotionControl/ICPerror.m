@@ -1,6 +1,6 @@
 function rmse = ICPerror(currScan, prevScan)
     try
-        [tform, ~] = matchScans(currScan, prevScan, 'MaxIterations', 25);
+        [tform, ~] = matchScans(currScan, prevScan, 'MaxIterations', 50);
         transScan = transformScan(currScan, tform);
         ptCloudCurr = transScan.Cartesian;
         ptCloudPrev = prevScan.Cartesian;

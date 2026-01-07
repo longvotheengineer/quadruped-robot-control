@@ -11,16 +11,17 @@ function [state, sensor_data] = correction_AKF(clientID, sim, sensor_data, slamO
     if ~isempty(state.first_pose) && ~isnan(sensor_data.gps_x)
         dx = sensor_data.gps_x - state.first_pose.x;
         dy = sensor_data.gps_y - state.first_pose.y;
-        dist_check = sqrt((dx - state.akf_x(end))^2 + (dy - state.akf_y(end))^2);
+        theta_rot = state.first_pose.theta;
+        gps_x_local = dx * cos(theta_rot) + dy * sin(theta_rot);
+        gps_y_local = -dx * sin(theta_rot) + dy * cos(theta_rot);
+        dist_check = sqrt((gps_x_local - state.akf_x(end))^2 + (gps_y_local - state.akf_y(end))^2);
         if dist_check < 2.0 
-            theta_rot = state.first_pose.theta;
-            gps_x = dx * cos(theta_rot) + dy * sin(theta_rot);
-            gps_y = -dx * sin(theta_rot) + dy * cos(theta_rot);
-            
-            gps_pos_update.x = gps_x;
-            gps_pos_update.y = gps_y;
-            state.gps_x(end+1) = gps_x;
-            state.gps_y(end+1) = gps_y;
+            gps_pos_update.x = gps_x_local;
+            gps_pos_update.y = gps_y_local;
+            state.gps_x(end+1) = gps_x_local;
+            state.gps_y(end+1) = gps_y_local;
+        else
+
         end
     end
 

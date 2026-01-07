@@ -12,7 +12,7 @@ function [theta,rho] = get_laser(clientID, sim)
     laserDataY = laserData(2:2:end);
     theta = atan2(laserDataY, laserDataX);
     rho = laserDataX./cos(theta);
-    inRangeIdx = find(rho < 4.9);
+    inRangeIdx = find(rho < 10);
     theta  = theta(inRangeIdx);
     rho  = rho(inRangeIdx); 
 

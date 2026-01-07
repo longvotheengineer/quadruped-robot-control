@@ -1,5 +1,4 @@
-function sensor_data = prediction_AKF(clientID, sim, sensor_data, akfObj)
-    dt = 0.05; 
+function sensor_data = prediction_AKF(clientID, sim, sensor_data, akfObj,dt)
     [res1, ax] = sim.simxGetFloatSignal(clientID, 'Accel1', sim.simx_opmode_buffer);
     [res2, ay] = sim.simxGetFloatSignal(clientID, 'Accel2', sim.simx_opmode_buffer);
     [res3, gz] = sim.simxGetFloatSignal(clientID, 'Velocity3', sim.simx_opmode_buffer);

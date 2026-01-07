@@ -1,4 +1,4 @@
-function control_gait(robot_config, robot_motion, sim, clientID, sensor_data, slamObj, axMap, state,akfObj)
+function [sensor_data] = control_gait(robot_config, robot_motion, sim, clientID, sensor_data, slamObj, axMap, state, akfObj)
     step_time_zero = 0.001;
     step_time      = 0.01;
     % joint handle
@@ -53,8 +53,11 @@ function control_gait(robot_config, robot_motion, sim, clientID, sensor_data, sl
                         sim.simxSetJointTargetPosition(clientID, h_LB(i), joint_pos_left_behind (i), sim.simx_opmode_streaming);
                         sim.simxSetJointTargetPosition(clientID, h_RF(i), joint_pos_right_front (i), sim.simx_opmode_streaming);
                     end
+                    sensor_data = prediction_AKF(clientID, sim, sensor_data, akfObj, step_time);
                     pause(step_time);   
+                    
                 end
+
                 gait_step = gait_step + 1;
             end
             
