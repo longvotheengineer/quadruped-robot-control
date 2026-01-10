@@ -1,4 +1,4 @@
-function controlGait(robot, simClient)
+function sensor_data = controlGait(robot, simClient, sensor_data)
     clientID = simClient.clientID;
     sim      = simClient.sim;
 
@@ -57,6 +57,7 @@ function controlGait(robot, simClient)
                         sim.simxSetJointTargetPosition(clientID, h_LB(i), joint_pos_left_behind (i), sim.simx_opmode_streaming);
                         sim.simxSetJointTargetPosition(clientID, h_RF(i), joint_pos_right_front (i), sim.simx_opmode_streaming);
                     end
+                    % sensor_data = prediction_AKF(simClient, sensor_data, akfObj, step_time);
                     pause(step_time);   
                 end               
                 gait_step = gait_step + 1;
